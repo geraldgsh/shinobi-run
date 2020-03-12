@@ -1,5 +1,6 @@
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -20,9 +21,36 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif|jpeg)$/,
         use: [
-          'file-loader',
+          'url-loader',
         ],
+      },
+	  {
+        test: /\.js$/, exclude: /node_modules/,
+        include: path.resolve(__dirname, 'src'),
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
       },
     ],
   },
-};
+
+  plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'index.html'),
+        to: path.resolve(__dirname, 'src')
+      },
+    ]),
+    new webpack.DefinePlugin({
+      'typeof CANVAS_RENDERER': JSON.stringify(true),
+      'typeof WEBGL_RENDERER': JSON.stringify(true)
+    })
+  ],
+
+  devServer: {
+    contentBase: path.resolve(__dirname, 'dist'),
+  },
+}
