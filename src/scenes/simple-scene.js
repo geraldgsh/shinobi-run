@@ -1,6 +1,5 @@
 export class SimpleScene extends Phaser.Scene {
   preload() {
-  	this.load.crossOrigin = 'anonymous';
     this.load.image('cokecan', 'assets/cokey.png');
   }
 
