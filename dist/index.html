@@ -3,11 +3,33 @@
 <head>
 	<title>Shinobi Run!</title>
 	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-  <link type="text/css" href='style.css'>
+  <link rel="stylesheet" href='style.css'>
 </head>
 <body>
+  <section class="columns">
+    <div class="column game is-9">
+      <div class="row">
+        <canvas id="gameCanvas" width="800" height="600"></canvas> 
+      </div>                 
+    </div>
+    <div class="column shelf is-3">
+      <div class="row">
+        <h4 class="title is-4" style="color:white;">Shinobi Run</h4>
+        <input
+            type="text"
+            class="input"
+            id="playerOneName"
+            placeholder="Player name"
+          />
+          <button class="startButton button is-primary">
+            Start New Game!
+          </button>
+      </div>      
+    </div>    
+  </section>
   <script src="main.js"></script>
 </body>
 </html>
