@@ -107,7 +107,7 @@ info All dependencies
 └─ yargs@12.0.5
 Done in 6.43s.
 
-n$ yarn run webpack-dev-server
+$ yarn run webpack-dev-server
 yarn run v1.21.1
 ℹ ｢wds｣: Project is running at http://localhost:8080/
 ℹ ｢wds｣: webpack output is served from /
@@ -200,4 +200,5 @@ info All dependencies
 └─ path-type@3.0.0
 Done in 4.08s.
 
-
+yarn webpack
+yarn run webpack-dev-server
