@@ -285,3 +285,12 @@ info All dependencies
 .
 └─ yargs-parser@18.1.0
 Done in 78.25s.
+
+sequence;
+
+0. game config and state with DOM
+1. Add sprite
+2. Add sprite idle and run animattion
+3. add keyboard input for left and right
+4. physics
+5. gravity

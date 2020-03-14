@@ -30,6 +30,19 @@ export class Stage extends Phaser.Scene {
     this.load.image('shinobi-rn8', 'assets/ninja/run__008.png');
     this.load.image('shinobi-rn9', 'assets/ninja/run__009.png');
 
+    this.load.image('shinobi-jp0', 'assets/ninja/jump__000.png');
+    this.load.image('shinobi-jp1', 'assets/ninja/jump__001.png');
+    this.load.image('shinobi-jp2', 'assets/ninja/jump__002.png');
+    this.load.image('shinobi-jp3', 'assets/ninja/jump__003.png');
+    this.load.image('shinobi-jp4', 'assets/ninja/jump__004.png');
+    this.load.image('shinobi-jp5', 'assets/ninja/jump__005.png');
+    this.load.image('shinobi-jp6', 'assets/ninja/jump__006.png');
+    this.load.image('shinobi-jp7', 'assets/ninja/jump__007.png');
+    this.load.image('shinobi-jp8', 'assets/ninja/jump__008.png');
+    this.load.image('shinobi-jp9', 'assets/ninja/jump__009.png');
+
+    this.load.image('platform01', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/platform.png');
+
     // this.load.image('forest-bg1', 'assets/forest/forest-bg1.png');
     // this.load.image('forest-bg2', 'assets/forest/forest-bg2.png');
     // this.load.image('forest-bg3', 'assets/forest/forest-bg3.png');
@@ -43,12 +56,16 @@ export class Stage extends Phaser.Scene {
 
   create() {
     gameState.active = true;
-    gameState.player = this.add.sprite(500, 500, 'shinobi');
+    gameState.player = this.physics.add.sprite(500, 500, 'shinobi');
 
     // gameState.bgColor = this.add.rectangle(0, 0, gameConfig.width, gameConfig.height, 0x00ffbb).setOrigin(0, 0);
     // this.createParallaxBackgrounds();
 
     gameState.cursors = this.input.keyboard.createCursorKeys();
+    gameState.platforms = this.physics.add.staticGroup();
+    gameState.platforms.create(300, 650, 'platform01');
+
+    this.physics.add.collider(gameState.player, gameState.platforms);
 
     this.anims.create({
       key: 'idle',
@@ -85,6 +102,24 @@ export class Stage extends Phaser.Scene {
     frameRate: 30,
     repeat: -1
   });
+  
+  this.anims.create({
+    key: 'jump',
+    frames: [
+        { key: 'shinobi-jp0' },
+        { key: 'shinobi-jp1' },
+        { key: 'shinobi-jp2' },
+        { key: 'shinobi-jp3' },
+        { key: 'shinobi-jp4' },
+        { key: 'shinobi-jp5' },
+        { key: 'shinobi-jp6' },
+        { key: 'shinobi-jp7' },
+        { key: 'shinobi-jp8' },
+        { key: 'shinobi-jp9' }
+    ],
+    frameRate: 10,
+    repeat: -1
+  });
   }
 
   update() {
@@ -100,18 +135,25 @@ export class Stage extends Phaser.Scene {
       } else {
         gameState.player.anims.play('idle', true);
       }
+      if (Phaser.Input.Keyboard.JustDown(gameState.cursors.space) && gameState.player.body.touching.down) {
+        gameState.player.setVelocityY(-500);
+        gameState.player.anims.play('jump', true);
+      }
+      if (!gameState.player.body.touching.down){
+        gameState.player.anims.play('jump', true);
+      }
     }    
   }
 
-  createParallaxBackgrounds() {
-    gameState.bg1 = this.add.image(0, 0, 'forest-bg1');
-    gameState.bg2 = this.add.image(0, 0, 'forest-bg2');
-    gameState.bg3 = this.add.image(0, 0, 'forest-bg3');
-    gameState.bg4 = this.add.image(0, 0, 'forest-bg4');
-    gameState.bg5 = this.add.image(0, 0, 'forest-bg5');
-    gameState.bg6 = this.add.image(0, 0, 'forest-bg6');
-    gameState.bg7 = this.add.image(0, 0, 'forest-bg7');
-  }
+  // createParallaxBackgrounds() {
+  //   gameState.bg1 = this.add.image(0, 0, 'forest-bg1');
+  //   gameState.bg2 = this.add.image(0, 0, 'forest-bg2');
+  //   gameState.bg3 = this.add.image(0, 0, 'forest-bg3');
+  //   gameState.bg4 = this.add.image(0, 0, 'forest-bg4');
+  //   gameState.bg5 = this.add.image(0, 0, 'forest-bg5');
+  //   gameState.bg6 = this.add.image(0, 0, 'forest-bg6');
+  //   gameState.bg7 = this.add.image(0, 0, 'forest-bg7');
+  // }
 };
 
 export const gameConfig = {
@@ -119,7 +161,14 @@ export const gameConfig = {
   canvas: gameCanvas,
   width: 960,
   height: 640,
-  scene: Stage
+  scene: Stage,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 800 },
+      enableBody: true,
+    }
+  }
 };
 
 export const gameState = {
