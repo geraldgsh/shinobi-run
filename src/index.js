@@ -76,7 +76,7 @@ export class Stage extends Phaser.Scene {
     gameState.active = true;
     gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
 
-    this.add.image(0, 320, 'cityBGSunSet');
+    this.add.image(2560, 320, 'cityBGSunSet');
 
     // gameState.bgColor = this.add.rectangle(0, 0, gameConfig.width, gameConfig.height, 0x00ffbb).setOrigin(0, 0);
     // this.createParallaxBackgrounds();
@@ -88,13 +88,33 @@ export class Stage extends Phaser.Scene {
       { x: 302, y: 640 },
       { x: 604, y: 640 },
       { x: 906, y: 640 },
-      { x: 1212, y: 640 },
+      { x: 1208, y: 640 },
+      { x: 1510, y: 640 },
+      { x: 1812, y: 640 },
+      { x: 2114, y: 640 },
+      { x: 2416, y: 640 },
+      { x: 2718, y: 640 },
+      { x: 3020, y: 640 },
+      { x: 3322, y: 640 },
+      { x: 3624, y: 640 },
+      { x: 3926, y: 640 },
+      { x: 4228, y: 640 },
+      { x: 4530, y: 640 },
+      { x: 4832, y: 640 },
+      { x: 5134, y: 640 },
+      
     ];
     floors.forEach(floor => {
       platforms.create(floor.x, floor.y, 'platform')
     });
 
     this.physics.add.collider(gameState.player, platforms);
+
+    this.cameras.main.setBounds(0, 0, gameState.width, gameState.height);
+    this.physics.world.setBounds(0, 0, gameState.width, gameState.height);
+    gameState.player.setCollideWorldBounds(true);
+    gameState.player.onWorldBounds = true;
+    this.cameras.main.startFollow(gameState.player, true, 0.5, 0.5);
 
     // gameState.map = this.make.tilemap({ key: 'map' });
     // gameState.tileset = gameState.map.addTilesetImage('CityScape', 'tiles');
@@ -106,7 +126,7 @@ export class Stage extends Phaser.Scene {
     // this.physics.add.collider(gameState.player, gameState.platforms);
 
     // gameState.player.setBounce(0.1);
-    // gameState.player.setCollideWorldBounds(true);
+    
     // this.physics.add.collider(this.player, platforms); 
 
     gameState.kunaiLeft = this.physics.add.group();
@@ -250,7 +270,9 @@ export const gameConfig = {
 
 export const gameState = {
   speed: 240,
-  ups: 380,
+  ups: 640,
+  width: 5120,
+  height: 640,
 };
 
 new Phaser.Game(gameConfig);
