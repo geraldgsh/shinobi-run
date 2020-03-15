@@ -5,9 +5,14 @@ import 'phaser';
 const gameCanvas = document.getElementById('gameCanvas')
 
 export class Stage extends Phaser.Scene {
+ 
   
   preload() {
     this.load.image('shinobi', 'assets/ninja/Idle__000.png');
+
+    this.load.image('kunaiLeft', 'assets/ninja/Kunai-left.png');
+    this.load.image('kunaiRight', 'assets/ninja/Kunai-right.png');
+
     this.load.image('shinobi-id0', 'assets/ninja/Idle__000.png');
     this.load.image('shinobi-id1', 'assets/ninja/Idle__001.png');
     this.load.image('shinobi-id2', 'assets/ninja/Idle__002.png');
@@ -41,7 +46,20 @@ export class Stage extends Phaser.Scene {
     this.load.image('shinobi-jp8', 'assets/ninja/jump__008.png');
     this.load.image('shinobi-jp9', 'assets/ninja/jump__009.png');
 
-    this.load.image('platform01', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/platform.png');
+    this.load.image('shinobi-tw0', 'assets/ninja/Throw__000.png');
+    this.load.image('shinobi-tw1', 'assets/ninja/Throw__001.png');
+    this.load.image('shinobi-tw2', 'assets/ninja/Throw__002.png');
+    this.load.image('shinobi-tw3', 'assets/ninja/Throw__003.png');
+    this.load.image('shinobi-tw4', 'assets/ninja/Throw__004.png');
+    this.load.image('shinobi-tw5', 'assets/ninja/Throw__005.png');
+    this.load.image('shinobi-tw6', 'assets/ninja/Throw__006.png');
+    this.load.image('shinobi-tw7', 'assets/ninja/Throw__007.png');
+    this.load.image('shinobi-tw8', 'assets/ninja/Throw__008.png');
+    this.load.image('shinobi-tw9', 'assets/ninja/Throw__009.png');
+
+    this.load.image('cityBGSunSet', 'assets/city/city_bg_sunset.png') 
+
+    this.load.image('platform', 'assets/platform/platform.png')
 
     // this.load.image('forest-bg1', 'assets/forest/forest-bg1.png');
     // this.load.image('forest-bg2', 'assets/forest/forest-bg2.png');
@@ -56,16 +74,48 @@ export class Stage extends Phaser.Scene {
 
   create() {
     gameState.active = true;
-    gameState.player = this.physics.add.sprite(500, 500, 'shinobi');
+    gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
+
+    this.add.image(0, 320, 'cityBGSunSet');
 
     // gameState.bgColor = this.add.rectangle(0, 0, gameConfig.width, gameConfig.height, 0x00ffbb).setOrigin(0, 0);
     // this.createParallaxBackgrounds();
 
     gameState.cursors = this.input.keyboard.createCursorKeys();
-    gameState.platforms = this.physics.add.staticGroup();
-    gameState.platforms.create(300, 650, 'platform01');
+    const platforms = this.physics.add.staticGroup();    
+    const floors = [
+      { x: 0, y: 640 },
+      { x: 302, y: 640 },
+      { x: 604, y: 640 },
+      { x: 906, y: 640 },
+      { x: 1212, y: 640 },
+    ];
+    floors.forEach(floor => {
+      platforms.create(floor.x, floor.y, 'platform')
+    });
 
-    this.physics.add.collider(gameState.player, gameState.platforms);
+    this.physics.add.collider(gameState.player, platforms);
+
+    // gameState.map = this.make.tilemap({ key: 'map' });
+    // gameState.tileset = gameState.map.addTilesetImage('CityScape', 'tiles');
+    // gameState.platforms = gameState.map.createStaticLayer('Platforms', gameState.tileset, 0, 200);
+    // platforms.setCollisionByProperty({ collides: true});
+    // this.matter.world.convertTilemapLayer(platforms);
+      
+    // gameState.platforms.setCollisionByExclusion(-1, true);
+    // this.physics.add.collider(gameState.player, gameState.platforms);
+
+    // gameState.player.setBounce(0.1);
+    // gameState.player.setCollideWorldBounds(true);
+    // this.physics.add.collider(this.player, platforms); 
+
+    gameState.kunaiLeft = this.physics.add.group();
+    gameState.kunaiRight = this.physics.add.group();
+    gameState.kunaiLeft.enableBody = true;
+    gameState.kunaiLeft.physicsBodyType = Phaser.Physics.ARCADE;
+    gameState.kunaiRight.enableBody = true;
+    gameState.kunaiRight.physicsBodyType = Phaser.Physics.ARCADE;
+
 
     this.anims.create({
       key: 'idle',
@@ -83,43 +133,60 @@ export class Stage extends Phaser.Scene {
       ],
       frameRate: 10,
       repeat: -1
-  });
+    });
 
-  this.anims.create({
-    key: 'run',
-    frames: [
-        { key: 'shinobi-rn0' },
-        { key: 'shinobi-rn1' },
-        { key: 'shinobi-rn2' },
-        { key: 'shinobi-rn3' },
-        { key: 'shinobi-rn4' },
-        { key: 'shinobi-rn5' },
-        { key: 'shinobi-rn6' },
-        { key: 'shinobi-rn7' },
-        { key: 'shinobi-rn8' },
-        { key: 'shinobi-rn9' }
-    ],
-    frameRate: 30,
-    repeat: -1
-  });
-  
-  this.anims.create({
-    key: 'jump',
-    frames: [
-        { key: 'shinobi-jp0' },
-        { key: 'shinobi-jp1' },
-        { key: 'shinobi-jp2' },
-        { key: 'shinobi-jp3' },
-        { key: 'shinobi-jp4' },
-        { key: 'shinobi-jp5' },
-        { key: 'shinobi-jp6' },
-        { key: 'shinobi-jp7' },
-        { key: 'shinobi-jp8' },
-        { key: 'shinobi-jp9' }
-    ],
-    frameRate: 10,
-    repeat: -1
-  });
+    this.anims.create({
+      key: 'run',
+      frames: [
+          { key: 'shinobi-rn0' },
+          { key: 'shinobi-rn1' },
+          { key: 'shinobi-rn2' },
+          { key: 'shinobi-rn3' },
+          { key: 'shinobi-rn4' },
+          { key: 'shinobi-rn5' },
+          { key: 'shinobi-rn6' },
+          { key: 'shinobi-rn7' },
+          { key: 'shinobi-rn8' },
+          { key: 'shinobi-rn9' }
+      ],
+      frameRate: 30,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: 'jump',
+      frames: [
+          { key: 'shinobi-jp0' },
+          { key: 'shinobi-jp1' },
+          { key: 'shinobi-jp2' },
+          { key: 'shinobi-jp3' },
+          { key: 'shinobi-jp4' },
+          { key: 'shinobi-jp5' },
+          { key: 'shinobi-jp6' },
+          { key: 'shinobi-jp7' },
+          { key: 'shinobi-jp8' },
+          { key: 'shinobi-jp9' }
+      ],
+      frameRate: 10,
+      repeat: -1
+    });
+    this.anims.create({
+      key: 'throw',
+      frames: [
+          { key: 'shinobi-tw0' },
+          { key: 'shinobi-tw1' },
+          { key: 'shinobi-tw2' },
+          { key: 'shinobi-tw3' },
+          { key: 'shinobi-tw4' },
+          { key: 'shinobi-tw5' },
+          { key: 'shinobi-tw6' },
+          { key: 'shinobi-tw7' },
+          { key: 'shinobi-tw8' },
+          { key: 'shinobi-tw9' }
+      ],
+      frameRate: 10,
+      repeat: -1,
+    });    
   }
 
   update() {
@@ -141,6 +208,15 @@ export class Stage extends Phaser.Scene {
       }
       if (!gameState.player.body.touching.down){
         gameState.player.anims.play('jump', true);
+      }
+      if (Phaser.Input.Keyboard.JustUp(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z))) {
+        if (gameState.player.flipX) {
+          gameState.player.anims.play('throw', true);
+          gameState.kunaiLeft.create(gameState.player.x, gameState.player.y, 'kunaiLeft').setVelocityX(-2800);
+        } else {
+          gameState.player.anims.play('throw', true);
+          gameState.kunaiRight.create(gameState.player.x, gameState.player.y, 'kunaiRight').setVelocityX(2800);
+        }        
       }
     }    
   }
@@ -165,7 +241,8 @@ export const gameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 800 },
+      gravity: { y: 600 },
+      debug: true,
       enableBody: true,
     }
   }

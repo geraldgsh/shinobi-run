@@ -294,3 +294,5 @@ sequence;
 3. add keyboard input for left and right
 4. physics
 5. gravity
+6. jump
+7. throw kunai
