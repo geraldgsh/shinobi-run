@@ -296,3 +296,5 @@ sequence;
 5. gravity
 6. jump
 7. throw kunai
+8. Add platforms
+9. add levels

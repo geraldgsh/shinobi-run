@@ -1,11 +1,20 @@
 import 'phaser';
+import { Animations } from 'phaser';
 // import { SimpleScene } from './scenes/simple-scene';
 // import { Stage } from './scenes/stage';
 
 const gameCanvas = document.getElementById('gameCanvas')
 
 export class Stage extends Phaser.Scene {
- 
+  constructor(key) {
+    super({key});
+    this.stageKey = key
+    this.nextStage = {
+      'Stage1': 'Stage2',
+      'Stage2': 'Stage3',
+      'Stage3': 'Stage4',
+    }
+  }
   
   preload() {
     this.load.image('shinobi', 'assets/ninja/Idle__000.png');
@@ -57,32 +66,107 @@ export class Stage extends Phaser.Scene {
     this.load.image('shinobi-tw8', 'assets/ninja/Throw__008.png');
     this.load.image('shinobi-tw9', 'assets/ninja/Throw__009.png');
 
+    this.load.image('star', 'assets/star/star-1.png');
+
     this.load.image('cityBGSunSet', 'assets/city/city_bg_sunset.png') 
 
     this.load.image('platform', 'assets/platform/platform.png')
-
-    // this.load.image('forest-bg1', 'assets/forest/forest-bg1.png');
-    // this.load.image('forest-bg2', 'assets/forest/forest-bg2.png');
-    // this.load.image('forest-bg3', 'assets/forest/forest-bg3.png');
-    // this.load.image('forest-bg4', 'assets/forest/forest-bg4.png');
-    // this.load.image('forest-bg5', 'assets/forest/forest-bg5.png');
-    // this.load.image('forest-bg6', 'assets/forest/forest-bg6.png');
-    // this.load.image('forest-bg7', 'assets/forest/forest-bg7.png');
-
-    
+    this.load.spritesheet('door', 'assets/door/door.png', { frameWidth: 32, frameHeight: 32});
+    this.load.image('snowman', 'assets/enemy/snowman.png')
+  
   }
 
   create() {
     gameState.active = true;
     gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
-
     this.add.image(2560, 320, 'cityBGSunSet');
 
-    // gameState.bgColor = this.add.rectangle(0, 0, gameConfig.width, gameConfig.height, 0x00ffbb).setOrigin(0, 0);
-    // this.createParallaxBackgrounds();
-
     gameState.cursors = this.input.keyboard.createCursorKeys();
-    const platforms = this.physics.add.staticGroup();    
+    gameState.platforms = this.physics.add.staticGroup();
+    this.makeFloors();
+    this.makeAnimations();
+    this.stageSetup();
+    this.enemies();
+    this.makeStars();
+
+    this.physics.add.collider(gameState.player, gameState.platforms);
+    this.physics.add.collider(gameState.goal, gameState.platforms);
+
+    this.cameras.main.setBounds(0, 0, gameState.width, gameState.height);
+    this.physics.world.setBounds(0, 0, gameState.width, gameState.height + gameState.player.height);
+    gameState.player.setCollideWorldBounds(true);
+    gameState.player.onWorldBounds = true;
+    this.cameras.main.startFollow(gameState.player, true, 0.5, 0.5);
+    
+
+    gameState.kunaiLeft = this.physics.add.group();
+    gameState.kunaiRight = this.physics.add.group();
+    gameState.kunaiLeft.enableBody = true;
+    gameState.kunaiLeft.physicsBodyType = Phaser.Physics.ARCADE;
+    gameState.kunaiRight.enableBody = true;
+    gameState.kunaiRight.physicsBodyType = Phaser.Physics.ARCADE;
+  }
+
+  makeStars() {
+    gameState.stars = this.physics.add.group({
+      key: 'star',
+      repeat: 50,
+      setXY: { x: 12, y: 0, stepX: 100 }
+    });
+    gameState.stars.enableBody = true;
+    gameState.stars.physicsBodyType = Phaser.Physics.ARCADE;
+  
+    gameState.stars.children.iterate(function (child) {
+      child.setBounceY(Phaser.Math.FloatBetween(0.3, 0.6));
+    });
+  
+    this.physics.add.collider(gameState.stars, gameState.platforms);
+    this.physics.add.overlap(gameState.player, gameState.stars, getStar, null, this);
+    let score = 0;
+    function getStar(player, star) {
+      star.disableBody(true, true);
+      score += 10;
+      scoreText.setText('Score: ' + score);
+      if (gameState.stars.countActive(true) === 0)
+      {
+        stars.children.iterate(function (child) {
+          child.enableBody(true, child.x, 0, true, true);
+        });
+        // var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+        // var bomb = bombs.create(x, 16, 'bomb');
+        // bomb.setBounce(1);
+        // bomb.setCollideWorldBounds(true);
+        // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);  
+      }
+    };
+    const scoreText = this.add.text(16, 16, 'score : 0', {fontSize: '32px', fill: '#000'});
+  }
+
+  enemies() {
+    let enemies = [
+      'nigel', 'ben', 'edgar', 
+      'barnes', 'pollock', 'pickle', 
+      'rory', 'borg', 'teeth', 
+      'finn', 'clint', 'keith'
+    ];
+    const waitFor = (ms) => new Promise(r => setTimeout(r, ms));
+    async function asyncForEach(array, callback) {
+      for (let index = 0; index < array.length; index++) {
+        // eslint-disable-next-line no-await-in-loop
+        await callback(array[index], index, array);
+      }
+    }
+    const start = async () => {
+      await asyncForEach(enemies, async (enemy) => {
+        await waitFor(400);
+        gameState.enemy = this.physics.add.sprite(gameState.width * Math.random(), 200, 'snowman');
+        this.physics.add.collider(gameState.enemy, gameState.platforms);
+      });
+    }
+    start();   
+  }
+
+  makeFloors() {
     const floors = [
       { x: 0, y: 640 },
       { x: 302, y: 640 },
@@ -101,42 +185,14 @@ export class Stage extends Phaser.Scene {
       { x: 4228, y: 640 },
       { x: 4530, y: 640 },
       { x: 4832, y: 640 },
-      { x: 5134, y: 640 },
-      
+      { x: 5134, y: 640 },      
     ];
     floors.forEach(floor => {
-      platforms.create(floor.x, floor.y, 'platform')
+      gameState.platforms.create(floor.x, floor.y, 'platform')
     });
+  }
 
-    this.physics.add.collider(gameState.player, platforms);
-
-    this.cameras.main.setBounds(0, 0, gameState.width, gameState.height);
-    this.physics.world.setBounds(0, 0, gameState.width, gameState.height);
-    gameState.player.setCollideWorldBounds(true);
-    gameState.player.onWorldBounds = true;
-    this.cameras.main.startFollow(gameState.player, true, 0.5, 0.5);
-
-    // gameState.map = this.make.tilemap({ key: 'map' });
-    // gameState.tileset = gameState.map.addTilesetImage('CityScape', 'tiles');
-    // gameState.platforms = gameState.map.createStaticLayer('Platforms', gameState.tileset, 0, 200);
-    // platforms.setCollisionByProperty({ collides: true});
-    // this.matter.world.convertTilemapLayer(platforms);
-      
-    // gameState.platforms.setCollisionByExclusion(-1, true);
-    // this.physics.add.collider(gameState.player, gameState.platforms);
-
-    // gameState.player.setBounce(0.1);
-    
-    // this.physics.add.collider(this.player, platforms); 
-
-    gameState.kunaiLeft = this.physics.add.group();
-    gameState.kunaiRight = this.physics.add.group();
-    gameState.kunaiLeft.enableBody = true;
-    gameState.kunaiLeft.physicsBodyType = Phaser.Physics.ARCADE;
-    gameState.kunaiRight.enableBody = true;
-    gameState.kunaiRight.physicsBodyType = Phaser.Physics.ARCADE;
-
-
+  makeAnimations() {
     this.anims.create({
       key: 'idle',
       frames: [
@@ -206,11 +262,41 @@ export class Stage extends Phaser.Scene {
       ],
       frameRate: 10,
       repeat: -1,
-    });    
+    });
+    this.anims.create({
+      key: 'door',
+      frames: this.anims.generateFrameNumbers('door', { start: 0, end: 16 }),
+      frameRate: 10,
+      repeat: -1
+    });
+  }
+
+  makePlatform(xIndex, yIndex) {
+    // Creates a platform evenly spaced along the two indices.
+    // If either is not a number it won't make a platform
+    if (typeof yIndex === 'number' && typeof xIndex === 'number') {
+      gameState.platforms.create((220 * xIndex),  yIndex * 70, 'platform').setOrigin(- 0.5, 0.5).refreshBody();
+    }
+  }
+
+  stageSetup() {
+    for (const [xIndex, yIndex] of this.heights.entries()) {
+      this.makePlatform(xIndex, yIndex);
+    }
+    gameState.goal = this.physics.add.sprite(gameState.width - 100, 100, 'door').setDepth(1000);
+    this.physics.add.overlap(gameState.player, gameState.goal, function() {
+      // Add in the collider that will fade out to the next level here
+      this.cameras.main.fade(800, 0, 0, 0, false, function(camera, progress) {
+        if (progress > .9) {
+          this.scene.start(this.nextStage[this.stageKey]);
+        }
+      })
+    }, null, this)      
   }
 
   update() {
     if(gameState.active){
+      gameState.goal.anims.play('door', true);
       if (gameState.cursors.right.isDown) {
         gameState.player.flipX = false;
         gameState.player.x += 5;
@@ -238,34 +324,92 @@ export class Stage extends Phaser.Scene {
           gameState.kunaiRight.create(gameState.player.x, gameState.player.y, 'kunaiRight').setVelocityX(2800);
         }        
       }
+      if (gameState.player.y > gameState.height) {
+        this.cameras.main.shake(240, .01, false, function(camera, progress) {
+          if (progress > .9) {
+            this.scene.restart(this.stageKey)
+          }          
+        })
+      }
     }    
   }
-
-  // createParallaxBackgrounds() {
-  //   gameState.bg1 = this.add.image(0, 0, 'forest-bg1');
-  //   gameState.bg2 = this.add.image(0, 0, 'forest-bg2');
-  //   gameState.bg3 = this.add.image(0, 0, 'forest-bg3');
-  //   gameState.bg4 = this.add.image(0, 0, 'forest-bg4');
-  //   gameState.bg5 = this.add.image(0, 0, 'forest-bg5');
-  //   gameState.bg6 = this.add.image(0, 0, 'forest-bg6');
-  //   gameState.bg7 = this.add.image(0, 0, 'forest-bg7');
-  // }
 };
+
+// Create a Level1 class that inherits from Level
+class Stage1 extends Stage {
+  constructor() {
+    super('Stage1');
+    this.heights = [
+      4, 7, 5, 
+      null, 5, 4, 
+      null, 4, 5, 
+      3, null, 7, 
+      5, 4, null, 
+      null, 7, 6, 
+      4, null, 4
+    ];
+  }
+}
+
+class Stage2 extends Stage {
+  constructor() {
+    super('Stage2')
+    this.heights = [
+      5, 4, null, 
+      4, 6, 4, 
+      6, 5, 4,
+      null, null, 7,
+      6, 5, 4,
+      null, 7, null,
+      7, 4, 1
+    ];
+  }
+}
+
+class Stage3 extends Stage {
+  constructor() {
+    super('Stage3')
+    this.heights = [
+      6, null, 6, 
+      4, 6, 4, 
+      5, null, 4,
+      8, 6, 4,
+      null, 7, null,
+      7, 5, 4,
+      3, null, null
+    ];
+  }
+}
+
+class Stage4 extends Stage {
+  constructor() {
+    super('Stage4')
+    this.heights = [
+      4, null, 7, 
+      6, null, 6, 
+      null, 5, 4,
+      null, 7, 5,
+      6, 7, 5,
+      null, null, null,
+      7, 6, 5
+    ];
+  }
+}
 
 export const gameConfig = {
   type: Phaser.CANVAS,
   canvas: gameCanvas,
   width: 960,
-  height: 640,
-  scene: Stage,
+  height: 640,  
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 600 },
+      gravity: { y: 550 },
       debug: true,
       enableBody: true,
     }
-  }
+  },
+  scene: [Stage1, Stage2, Stage3, Stage4]
 };
 
 export const gameState = {
@@ -275,4 +419,4 @@ export const gameState = {
   height: 640,
 };
 
-new Phaser.Game(gameConfig);
+var game = new Phaser.Game(gameConfig);
