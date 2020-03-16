@@ -88,23 +88,17 @@ export class Stage extends Phaser.Scene {
     this.stageSetup();
     this.enemies();
     this.makeStars();
-
+    this.camera();
     this.physics.add.collider(gameState.player, gameState.platforms);
     this.physics.add.collider(gameState.goal, gameState.platforms);
-
-    this.cameras.main.setBounds(0, 0, gameState.width, gameState.height);
-    this.physics.world.setBounds(0, 0, gameState.width, gameState.height + gameState.player.height);
-    gameState.player.setCollideWorldBounds(true);
-    gameState.player.onWorldBounds = true;
-    this.cameras.main.startFollow(gameState.player, true, 0.5, 0.5);
-    
+  
 
     gameState.kunaiLeft = this.physics.add.group();
     gameState.kunaiRight = this.physics.add.group();
-    gameState.kunaiLeft.enableBody = true;
-    gameState.kunaiLeft.physicsBodyType = Phaser.Physics.ARCADE;
-    gameState.kunaiRight.enableBody = true;
-    gameState.kunaiRight.physicsBodyType = Phaser.Physics.ARCADE;
+    // gameState.kunaiLeft.enableBody = true;
+    // gameState.kunaiLeft.physicsBodyType = Phaser.Physics.ARCADE;
+    // gameState.kunaiRight.enableBody = true;
+    // gameState.kunaiRight.physicsBodyType = Phaser.Physics.ARCADE;
   }
 
   makeStars() {
@@ -139,7 +133,7 @@ export class Stage extends Phaser.Scene {
         // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);  
       }
     };
-    const scoreText = this.add.text(16, 16, 'score : 0', {fontSize: '32px', fill: '#000'});
+    let scoreText = this.add.text(16, 16, 'score : 0', {fontSize: '32px', fill: '#000'});
   }
 
   enemies() {
@@ -161,9 +155,22 @@ export class Stage extends Phaser.Scene {
         await waitFor(400);
         gameState.enemy = this.physics.add.sprite(gameState.width * Math.random(), 200, 'snowman');
         this.physics.add.collider(gameState.enemy, gameState.platforms);
+        this.physics.add.collider(gameState.player, gameState.enemy, hitPlayer, null, this);
+        gameState.enemy = this.physics.add.group();
       });
     }
     start();   
+    
+    function hitPlayer(player, enemy) {
+
+      this.add.text(gameState.player.x, 50, '      Game Over...\n  Click to play again.', { fontFamily: 'Arial', fontSize: 36, color: '#ffffff' });
+      this.physics.pause();
+      gameState.active = false;
+      player.anims.play('turn');
+      this.input.on('pointerup', () => {
+        this.scene.restart();
+      })
+    }
   }
 
   makeFloors() {
@@ -190,6 +197,14 @@ export class Stage extends Phaser.Scene {
     floors.forEach(floor => {
       gameState.platforms.create(floor.x, floor.y, 'platform')
     });
+  }
+
+  camera() {
+    this.cameras.main.setBounds(0, 0, gameState.width, gameState.height);
+    this.physics.world.setBounds(0, 0, gameState.width, gameState.height + gameState.player.height);
+    gameState.player.setCollideWorldBounds(true);
+    gameState.player.onWorldBounds = true;
+    this.cameras.main.startFollow(gameState.player, true, 0.5, 0.5);
   }
 
   makeAnimations() {
@@ -331,7 +346,7 @@ export class Stage extends Phaser.Scene {
           }          
         })
       }
-    }    
+    }  
   }
 };
 
