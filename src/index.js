@@ -3,9 +3,7 @@ import { Animations } from 'phaser';
 // import { SimpleScene } from './scenes/simple-scene';
 // import { Stage } from './scenes/stage';
 
-const gameCanvas = document.getElementById('gameCanvas')
-
-var score = 0;
+const gameCanvas = document.getElementById('gameCanvas');
 
 export class Stage extends Phaser.Scene {
   constructor(key) {
@@ -16,8 +14,8 @@ export class Stage extends Phaser.Scene {
       'Stage2': 'Stage3',
       'Stage3': 'Stage4',
     }
+    this.score = 0;
   }
-  
   preload() {
     this.load.image('shinobi', 'assets/ninja/Idle__000.png');
 
@@ -82,9 +80,10 @@ export class Stage extends Phaser.Scene {
     gameState.active = true;
     gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
     this.add.image(2560, 320, 'cityBGSunSet');
-
     gameState.cursors = this.input.keyboard.createCursorKeys();
     gameState.platforms = this.physics.add.staticGroup();
+    gameState.kunaiLeft = this.physics.add.group();
+    gameState.kunaiRight = this.physics.add.group(); 
     this.makeFloors();
     this.makeAnimations();
     this.stageSetup();
@@ -92,15 +91,7 @@ export class Stage extends Phaser.Scene {
     this.makeStars();
     this.camera();
     this.physics.add.collider(gameState.player, gameState.platforms);
-    this.physics.add.collider(gameState.goal, gameState.platforms);
-  
-
-    gameState.kunaiLeft = this.physics.add.group();
-    gameState.kunaiRight = this.physics.add.group();
-    // gameState.kunaiLeft.enableBody = true;
-    // gameState.kunaiLeft.physicsBodyType = Phaser.Physics.ARCADE;
-    // gameState.kunaiRight.enableBody = true;
-    // gameState.kunaiRight.physicsBodyType = Phaser.Physics.ARCADE;
+    this.physics.add.collider(gameState.goal, gameState.platforms);      
   }
 
   makeStars() {
@@ -121,8 +112,8 @@ export class Stage extends Phaser.Scene {
     
     function getStar(player, star) {
       star.disableBody(true, true);
-      score += 10;
-      scoreText.setText('Score: ' + score);
+      this.score += 10;
+      scoreText.setText('Score: ' + this.score);
       if (gameState.stars.countActive(true) === 0)
       {
         stars.children.iterate(function (child) {
@@ -132,10 +123,20 @@ export class Stage extends Phaser.Scene {
         // var bomb = bombs.create(x, 16, 'bomb');
         // bomb.setBounce(1);
         // bomb.setCollideWorldBounds(true);
-        // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);  
+        // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        
       }
+      this.showScore(score);  
+      
     };
     let scoreText = this.add.text(16, 16, 'score : 0', {fontSize: '32px', fill: '#000'});
+    
+  }
+
+  showScore(score) {
+    const scoreElement = document.getElementById('score');
+    scoreElement.innerHTML = `Current Score: ${this.score}`
+     scoreElement.setAttribute("class", "has-text-white has-text-weight-bold");
   }
 
   enemies() {
@@ -166,15 +167,17 @@ export class Stage extends Phaser.Scene {
     start();
 
     function hitEnemyRight(kunaiRight, enemy) {
-      score += 30;
+      this.score += 30;
       kunaiRight.destroy();
-      enemy.destroy();      
+      enemy.destroy();
+      this.showScore(score);      
     }
     
     function hitEnemyLeft(kunaiLeft, enemy) {
-      score += 30;
+      this.score += 30;
       kunaiLeft.destroy();
-      enemy.destroy();      
+      enemy.destroy();
+      this.showScore(score);      
     }
     
     function hitPlayer(player) {

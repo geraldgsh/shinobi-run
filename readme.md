@@ -298,3 +298,8 @@ sequence;
 7. throw kunai
 8. Add platforms
 9. add levels
+10. enemy
+11. player kill
+12. enemy kill
+13. add stars
+14. scoring
