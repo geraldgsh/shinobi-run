@@ -5,6 +5,8 @@ import { Animations } from 'phaser';
 
 const gameCanvas = document.getElementById('gameCanvas')
 
+var score = 0;
+
 export class Stage extends Phaser.Scene {
   constructor(key) {
     super({key});
@@ -116,7 +118,7 @@ export class Stage extends Phaser.Scene {
   
     this.physics.add.collider(gameState.stars, gameState.platforms);
     this.physics.add.overlap(gameState.player, gameState.stars, getStar, null, this);
-    let score = 0;
+    
     function getStar(player, star) {
       star.disableBody(true, true);
       score += 10;
@@ -155,15 +157,29 @@ export class Stage extends Phaser.Scene {
         await waitFor(400);
         gameState.enemy = this.physics.add.sprite(gameState.width * Math.random(), 200, 'snowman');
         this.physics.add.collider(gameState.enemy, gameState.platforms);
+        this.physics.add.collider(gameState.kunaiRight, gameState.enemy, hitEnemyRight, null, this);
+        this.physics.add.collider(gameState.kunaiLeft, gameState.enemy, hitEnemyLeft, null, this);
         this.physics.add.collider(gameState.player, gameState.enemy, hitPlayer, null, this);
         gameState.enemy = this.physics.add.group();
       });
     }
-    start();   
-    
-    function hitPlayer(player, enemy) {
+    start();
 
-      this.add.text(gameState.player.x, 50, '      Game Over...\n  Click to play again.', { fontFamily: 'Arial', fontSize: 36, color: '#ffffff' });
+    function hitEnemyRight(kunaiRight, enemy) {
+      score += 30;
+      kunaiRight.destroy();
+      enemy.destroy();      
+    }
+    
+    function hitEnemyLeft(kunaiLeft, enemy) {
+      score += 30;
+      kunaiLeft.destroy();
+      enemy.destroy();      
+    }
+    
+    function hitPlayer(player) {
+      this.add.text(gameState.player.x, 50, '      Game Over...\n  Click to play again.', 
+      { fontFamily: 'Arial', fontSize: 36, color: '#ffffff' });
       this.physics.pause();
       gameState.active = false;
       player.anims.play('turn');
