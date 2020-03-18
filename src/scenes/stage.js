@@ -1,9 +1,12 @@
-import { mole } from './stage5';
-
-const meet = () => {
-  return mole;
-  // console.log('cheerssssssssssssssssssssssssss');
-}
+import { floors } from "../assetManager/flooring";
+import {
+  preloadShinobiIdle,
+  preloadShinobiRun,
+  preloadStar,
+  preloadBG,
+  preloadPlatform,
+  preloadEnemy,
+} from "../assetManager/preloadAssets";
 
 const gameState = {
   speed: 240,
@@ -24,22 +27,40 @@ export class Stage extends Phaser.Scene {
     this.score = 0;
   }
   preload() {
-    meet();
+    this.preloader();
+  }
+
+  create() {
+    gameState.active = true;
+    gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
+    this.add.image(2560, 320, 'cityBGSunSet');
+    gameState.cursors = this.input.keyboard.createCursorKeys();
+    gameState.platforms = this.physics.add.staticGroup();
+    gameState.kunaiLeft = this.physics.add.group();
+    gameState.kunaiRight = this.physics.add.group(); 
+    this.makeFloors();
+    this.stageSetup();
+    this.enemies();
+    this.makeStars();
+    this.makeAnimations();
+    this.camera();
+    this.physics.add.collider(gameState.player, gameState.platforms);
+    this.physics.add.collider(gameState.goal, gameState.platforms);
+  }
+
+  preloader() {
     this.load.image('shinobi', 'assets/ninja/Idle__000.png');
 
     this.load.image('kunaiLeft', 'assets/ninja/Kunai-left.png');
     this.load.image('kunaiRight', 'assets/ninja/Kunai-right.png');
 
-    this.load.image('shinobi-id0', 'assets/ninja/Idle__000.png');
-    this.load.image('shinobi-id1', 'assets/ninja/Idle__001.png');
-    this.load.image('shinobi-id2', 'assets/ninja/Idle__002.png');
-    this.load.image('shinobi-id3', 'assets/ninja/Idle__003.png');
-    this.load.image('shinobi-id4', 'assets/ninja/Idle__004.png');
-    this.load.image('shinobi-id5', 'assets/ninja/Idle__005.png');
-    this.load.image('shinobi-id6', 'assets/ninja/Idle__006.png');
-    this.load.image('shinobi-id7', 'assets/ninja/Idle__007.png');
-    this.load.image('shinobi-id8', 'assets/ninja/Idle__008.png');
-    this.load.image('shinobi-id9', 'assets/ninja/Idle__009.png');
+    preloadShinobiIdle.forEach(idle => {
+      this.load.image(idle.name, idle.path);
+    });
+
+    preloadShinobiRun.forEach(run => {
+      this.load.image(run.name, run.path);
+    });
 
     this.load.image('shinobi-rn0', 'assets/ninja/run__000.png');
     this.load.image('shinobi-rn1', 'assets/ninja/run__001.png');
@@ -74,32 +95,28 @@ export class Stage extends Phaser.Scene {
     this.load.image('shinobi-tw8', 'assets/ninja/Throw__008.png');
     this.load.image('shinobi-tw9', 'assets/ninja/Throw__009.png');
 
-    this.load.image('star', 'assets/star/star-1.png');
-
-    this.load.image('cityBGSunSet', 'assets/city/city_bg_sunset.png') 
-
-    this.load.image('platform', 'assets/platform/platform.png')
-    this.load.spritesheet('door', 'assets/door/door.png', { frameWidth: 32, frameHeight: 32});
-    this.load.image('snowman', 'assets/enemy/snowman.png')
-  
-  }
-
-  create() {
-    gameState.active = true;
-    gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
-    this.add.image(2560, 320, 'cityBGSunSet');
-    gameState.cursors = this.input.keyboard.createCursorKeys();
-    gameState.platforms = this.physics.add.staticGroup();
-    gameState.kunaiLeft = this.physics.add.group();
-    gameState.kunaiRight = this.physics.add.group(); 
-    this.makeFloors();
-    this.makeAnimations();
-    this.stageSetup();
-    this.enemies();
-    this.makeStars();
-    this.camera();
-    this.physics.add.collider(gameState.player, gameState.platforms);
-    this.physics.add.collider(gameState.goal, gameState.platforms);
+    this.load.spritesheet('door', 'assets/door/door.png',
+    { frameWidth: 32, frameHeight: 32});
+    preloadStar.forEach(star => {
+      this.load.image(star.name, star.path);
+    });
+    preloadBG.forEach(BG => {
+      this.load.image(BG.name, BG.path);
+    });
+    preloadPlatform.forEach(platform => {
+      this.load.image(platform.name, platform.path);
+    });
+    preloadEnemy.forEach(enemy => {
+      this.load.image(enemy.name, enemy.path);
+    });
+    // preloadSpriteSheet.forEach(sprite => {
+    //   this.load.spritesheet(
+    //     sprite.name, 
+    //     sprite.path, 
+    //     sprite.frameWidth, 
+    //     sprite.frameHeight
+    //   );
+    // });
   }
 
   makeStars() {
@@ -126,13 +143,7 @@ export class Stage extends Phaser.Scene {
       {
         stars.children.iterate(function (child) {
           child.enableBody(true, child.x, 0, true, true);
-        });
-        // var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-        // var bomb = bombs.create(x, 16, 'bomb');
-        // bomb.setBounce(1);
-        // bomb.setCollideWorldBounds(true);
-        // bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        
+        });        
       }
       this.showScore(score);  
       
@@ -144,7 +155,7 @@ export class Stage extends Phaser.Scene {
   showScore(score) {
     const scoreElement = document.getElementById('score');
     scoreElement.innerHTML = `Current Score: ${this.score}`
-     scoreElement.setAttribute("class", "has-text-white has-text-weight-bold");
+    scoreElement.setAttribute("class", "has-text-white has-text-weight-bold");
   }
 
   enemies() {
@@ -202,26 +213,6 @@ export class Stage extends Phaser.Scene {
   }
 
   makeFloors() {
-    const floors = [
-      { x: 0, y: 640 },
-      { x: 302, y: 640 },
-      { x: 604, y: 640 },
-      { x: 906, y: 640 },
-      { x: 1208, y: 640 },
-      { x: 1510, y: 640 },
-      { x: 1812, y: 640 },
-      { x: 2114, y: 640 },
-      { x: 2416, y: 640 },
-      { x: 2718, y: 640 },
-      { x: 3020, y: 640 },
-      { x: 3322, y: 640 },
-      { x: 3624, y: 640 },
-      { x: 3926, y: 640 },
-      { x: 4228, y: 640 },
-      { x: 4530, y: 640 },
-      { x: 4832, y: 640 },
-      { x: 5134, y: 640 },      
-    ];
     floors.forEach(floor => {
       gameState.platforms.create(floor.x, floor.y, 'platform')
     });
@@ -244,16 +235,16 @@ export class Stage extends Phaser.Scene {
     this.anims.create({
       key: 'idle',
       frames: [
-          { key: 'shinobi-id0' },
-          { key: 'shinobi-id1' },
-          { key: 'shinobi-id2' },
-          { key: 'shinobi-id3' },
-          { key: 'shinobi-id4' },
-          { key: 'shinobi-id5' },
-          { key: 'shinobi-id6' },
-          { key: 'shinobi-id7' },
-          { key: 'shinobi-id8' },
-          { key: 'shinobi-id9' }
+        { key: 'shinobi-id0' },
+        { key: 'shinobi-id1' },
+        { key: 'shinobi-id2' },
+        { key: 'shinobi-id3' },
+        { key: 'shinobi-id4' },
+        { key: 'shinobi-id5' },
+        { key: 'shinobi-id6' },
+        { key: 'shinobi-id7' },
+        { key: 'shinobi-id8' },
+        { key: 'shinobi-id9' }
       ],
       frameRate: 10,
       repeat: -1
@@ -262,16 +253,16 @@ export class Stage extends Phaser.Scene {
     this.anims.create({
       key: 'run',
       frames: [
-          { key: 'shinobi-rn0' },
-          { key: 'shinobi-rn1' },
-          { key: 'shinobi-rn2' },
-          { key: 'shinobi-rn3' },
-          { key: 'shinobi-rn4' },
-          { key: 'shinobi-rn5' },
-          { key: 'shinobi-rn6' },
-          { key: 'shinobi-rn7' },
-          { key: 'shinobi-rn8' },
-          { key: 'shinobi-rn9' }
+        { key: 'shinobi-rn0' },
+        { key: 'shinobi-rn1' },
+        { key: 'shinobi-rn2' },
+        { key: 'shinobi-rn3' },
+        { key: 'shinobi-rn4' },
+        { key: 'shinobi-rn5' },
+        { key: 'shinobi-rn6' },
+        { key: 'shinobi-rn7' },
+        { key: 'shinobi-rn8' },
+        { key: 'shinobi-rn9' }
       ],
       frameRate: 30,
       repeat: -1
@@ -280,16 +271,16 @@ export class Stage extends Phaser.Scene {
     this.anims.create({
       key: 'jump',
       frames: [
-          { key: 'shinobi-jp0' },
-          { key: 'shinobi-jp1' },
-          { key: 'shinobi-jp2' },
-          { key: 'shinobi-jp3' },
-          { key: 'shinobi-jp4' },
-          { key: 'shinobi-jp5' },
-          { key: 'shinobi-jp6' },
-          { key: 'shinobi-jp7' },
-          { key: 'shinobi-jp8' },
-          { key: 'shinobi-jp9' }
+        { key: 'shinobi-jp0' },
+        { key: 'shinobi-jp1' },
+        { key: 'shinobi-jp2' },
+        { key: 'shinobi-jp3' },
+        { key: 'shinobi-jp4' },
+        { key: 'shinobi-jp5' },
+        { key: 'shinobi-jp6' },
+        { key: 'shinobi-jp7' },
+        { key: 'shinobi-jp8' },
+        { key: 'shinobi-jp9' }
       ],
       frameRate: 10,
       repeat: -1
@@ -297,16 +288,16 @@ export class Stage extends Phaser.Scene {
     this.anims.create({
       key: 'throw',
       frames: [
-          { key: 'shinobi-tw0' },
-          { key: 'shinobi-tw1' },
-          { key: 'shinobi-tw2' },
-          { key: 'shinobi-tw3' },
-          { key: 'shinobi-tw4' },
-          { key: 'shinobi-tw5' },
-          { key: 'shinobi-tw6' },
-          { key: 'shinobi-tw7' },
-          { key: 'shinobi-tw8' },
-          { key: 'shinobi-tw9' }
+        { key: 'shinobi-tw0' },
+        { key: 'shinobi-tw1' },
+        { key: 'shinobi-tw2' },
+        { key: 'shinobi-tw3' },
+        { key: 'shinobi-tw4' },
+        { key: 'shinobi-tw5' },
+        { key: 'shinobi-tw6' },
+        { key: 'shinobi-tw7' },
+        { key: 'shinobi-tw8' },
+        { key: 'shinobi-tw9' }
       ],
       frameRate: 10,
       repeat: -1,
