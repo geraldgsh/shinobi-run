@@ -3,7 +3,7 @@
 
 ### Snapshot
 
-![]()
+![](https://github.com/geraldgsh/shinobi-run/blob/feature/assets/screenshot/shinobi-run-screenshot.JPG)
 
 ### Introduction.
 
@@ -73,6 +73,7 @@ https://github.com/geraldgsh/shinobi-run
 4. Reset game to stage 1 when game is over
 5. Set physically camera bounds to pushes shinobi as it pans left to right
 6. Add background music and sound effects
+7. Unit testing for the game
 
 and many more.....
 
