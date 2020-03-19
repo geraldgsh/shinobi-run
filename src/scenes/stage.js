@@ -159,6 +159,7 @@ export class Stage extends Phaser.Scene {
       kunaiRight.destroy();
       enemy.destroy();
       this.showScore(this.score);
+      return this.score;
     }
 
     function hitEnemyLeft(kunaiLeft, enemy) {
