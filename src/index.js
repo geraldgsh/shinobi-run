@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-
+// eslint-disable-next-line import/no-unresolved
 import 'phaser';
 import { Stage1 } from './scenes/stage1';
 import { Stage2 } from './scenes/stage2';

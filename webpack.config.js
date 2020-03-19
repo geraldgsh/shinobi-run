@@ -24,15 +24,15 @@ module.exports = {
           'url-loader',
         ],
       },
-	  {
+      {
         test: /\.js$/, exclude: /node_modules/,
         include: path.resolve(__dirname, 'src'),
         use: {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env']
-          }
-        }
+          },
+        },
       },
     ],
   },
@@ -48,11 +48,11 @@ module.exports = {
       {
         from: path.resolve(__dirname, 'assets', '**', '*'),
         to: path.resolve(__dirname, 'dist')
-      }
+      },
     ]),
     new webpack.DefinePlugin({
       'typeof CANVAS_RENDERER': JSON.stringify(true),
       'typeof WEBGL_RENDERER': JSON.stringify(true)
     }),
-  ], 
-}
+  ],
+};
