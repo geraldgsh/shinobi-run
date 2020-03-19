@@ -1,305 +1,104 @@
-$ yarn init
-yarn init v1.21.1
-question name (shinobi-run):
-question version (1.0.0):
-question description: Endless running platform game
-question entry point (index.js):
-question repository url (https://github.com/geraldgsh/shinobi-run.git):
-question author: Gerald Goh
-question license (MIT):
-question private:
-success Saved package.json
-Done in 20.46s.
+# Shinobi Run
+[Capstone  Project]
 
-$ yarn add --dev webpack webpack-cli     
-yarn add v1.21.1
-info No lockfile found.
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-info fsevents@1.2.11: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.11" is an optional dependency and failed compatibility check. Excluding it from installation.        [3/4] Linking dependencies...
-[4/4] Building fresh packages...
-success Saved lockfile.
-success Saved 256 new dependencies.
-info Direct dependencies
-├─ webpack-cli@3.3.11
-└─ webpack@4.42.0
-info All dependencies
-├─ @webassemblyjs/floating-point-hex-parser@1.8.5
-.
-.
-.
-└─ yargs@13.2.4
-Done in 9.28s.
+### Snapshot
 
-$ yarn add -D @babel/cli @babel/core @babel/preset-env babel-loader@latest
-yarn add v1.21.1
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-info fsevents@1.2.11: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.11" is an optional dependency and failed compatibility check. Excluding it from installation.        [3/4] Linking dependencies...
-[4/4] Building fresh packages...
-success Saved lockfile.
-success Saved 88 new dependencies.
-info Direct dependencies
-├─ @babel/cli@7.8.4
-├─ @babel/core@7.8.7
-├─ @babel/preset-env@7.8.7
-└─ babel-loader@8.0.6
-info All dependencies
-├─ @babel/cli@7.8.4
-├─ @babel/core@7.8.7
-.
-.
-└─ unicode-property-aliases-ecmascript@1.1.0
-Done in 8.99s.
+![]()
 
-** reference note: https://github.com/babel/babel/issues/8599
+### Introduction.
 
-$ yarn add phaser@latest
-yarn add v1.21.1
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-info fsevents@1.2.11: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.11" is an optional dependency and failed compatibility check. Excluding it from installation.        [3/4] Linking dependencies...
-[4/4] Building fresh packages...
-success Saved lockfile.
-success Saved 6 new dependencies.
-info Direct dependencies
-└─ phaser@3.22.0
-info All dependencies
-├─ eventemitter3@3.1.2
-├─ exports-loader@0.7.0
-├─ imports-loader@0.8.0
-├─ path@0.12.7
-├─ phaser@3.22.0
-└─ util@0.10.4
-Done in 5.01s.
+This project is one of many Javascript project to be completed by [Microverse](https://www.microverse.org/) students.
 
-$ yarn run webpack
-yarn run v1.21.1
-$ /mnt/d/Google_Drive/Microverse/5.Javascript/7.phaser/shinobi-run/node_modules/.bin/webpack
-Hash: 1175d49544ac8351d3a3
-Version: webpack 4.42.0
-Time: 876ms
-Built at: 03/13/2020 1:35:30 AM
-  Asset      Size  Chunks             Chunk Names
-main.js  3.91 KiB    main  [emitted]  main
-Entrypoint main = main.js
-[./src/index.js] 141 bytes {main} [built]
-Done in 1.83s.
+This game was inspired by [Shinobi](https://en.wikipedia.org/wiki/Shinobi_(series)) series from the early 90's. The protagonist have to fight enemy with his ninja tools and skill to clear each level. In Shinobi Run, the hero have to collect stars and fight snowman before reaching a portal at the end of each stage.
 
+### How to play
+
+At the start of the game, Shinobi is dropped where the player have to run, jump, collect stars and fight snowmen to gain points while the camera pans to the end of the stage. Use arrow buttons to run. Spacebar to jump. "Z" to throw deadly "kunais" and "X" to start camera pan.
+
+### Project Objectives
+
+[Here](https://www.notion.so/Platform-game-4a55a7d1fcc245bcb012c76814764712)
+
+### Project Objectives
+
+The first 2 days was exploring Phaser.js framework through tutorials and readings. Following by sourcing for sprites and images on [openart](https://opengameart.org/). I wanted simple game mechanics to give players the perception of endless running by panning the camera instead having random spawning moving platforms across the screen. To accummulate points, player will need to collect start worth 10 points and destroy Snowmen worth 30 points. For that I had to stitch city background image several times to achieve a long stage. Of course I slowly discovered sprites and images have to be scaled in ratio to set game screen canvas size. By the end of stage 4, player will be looped in the same stage till the game refreshes.  
+
+#### Built with
+
+This is a testing app built with babel & JS.
+
+### Wiki
+
+Checkout our [wikipage](https://github.com/geraldgsh/shinobi-run/wiki) for more details. 
+
+- JavaScript
+- HMTL
+- PHASER JS
+- npm
+- webpack
+
+#### Live Demo
+
+[Live](https://shinobi-run.netlify.com/)
+
+#### To play locally
+
+Clone repo 
+```sh
+$ git clone https://github.com/geraldgsh/shinobi-run.git
+```
+
+Change directory, install tools and begin
+
+```sh
+$ yarn add --dev webpack webpack-cli
 $ yarn add -D webpack-dev-server@latest
-yarn add v1.21.1
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-info fsevents@1.2.11: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.11" is an optional dependency and failed compatibility check. Excluding it from installation.        [3/4] Linking dependencies...
-[4/4] Building fresh packages...
-success Saved lockfile.
-success Saved 120 new dependencies.
-info Direct dependencies
-└─ webpack-dev-server@3.10.3
-info All dependencies
-├─ @types/events@3.0.0
-.
-.
-└─ yargs@12.0.5
-Done in 6.43s.
+$ yarn run webpack-dev-server 
+```
 
-$ yarn run webpack-dev-server
-yarn run v1.21.1
-ℹ ｢wds｣: Project is running at http://localhost:8080/
-ℹ ｢wds｣: webpack output is served from /
-ℹ ｢wds｣: Content not from webpack is served from /mnt/d/Google_Drive/Microverse/5.Javascript/7.phaser/shinobi-run/dist  ℹ ｢wdm｣: Hash: c661e8c8570e49a8cd73
-Version: webpack 4.42.0
-Time: 1021ms
-Built at: 03/13/2020 1:45:52 AM
-  Asset     Size  Chunks             Chunk Names
-main.js  360 KiB    main  [emitted]  main
-Entrypoint main = main.js
-[0] multi (webpack)-dev-server/client?http://localhost:8080 ./src/index.js 40 bytes {main} [built]
-[./node_modules/ansi-html/index.js] 4.16 KiB {main} [built]
-[./node_modules/ansi-regex/index.js] 135 bytes {main} [built]
-[./node_modules/html-entities/index.js] 231 bytes {main} [built]
-[./node_modules/loglevel/lib/loglevel.js] 8.41 KiB {main} [built]
-[./node_modules/strip-ansi/index.js] 161 bytes {main} [built]
-[./node_modules/webpack-dev-server/client/index.js?http://localhost:8080] (webpack)-dev-server/client?http://localhost:8080 4.29 KiB {main} [built]
-[./node_modules/webpack-dev-server/client/overlay.js] (webpack)-dev-server/client/overlay.js 3.51 KiB {main} [built]    [./node_modules/webpack-dev-server/client/socket.js] (webpack)-dev-server/client/socket.js 1.53 KiB {main} [built]      [./node_modules/webpack-dev-server/client/utils/createSocketUrl.js] (webpack)-dev-server/client/utils/createSocketUrl.js 2.91 KiB {main} [built]
-[./node_modules/webpack-dev-server/client/utils/log.js] (webpack)-dev-server/client/utils/log.js 964 bytes {main} [built]
-[./node_modules/webpack-dev-server/client/utils/reloadApp.js] (webpack)-dev-server/client/utils/reloadApp.js 1.59 KiB {main} [built]
-[./node_modules/webpack-dev-server/client/utils/sendMessage.js] (webpack)-dev-server/client/utils/sendMessage.js 402 bytes {main} [built]
-[./node_modules/webpack/hot sync ^\.\/log$] (webpack)/hot sync nonrecursive ^\.\/log$ 170 bytes {main} [built]
-[./src/index.js] 141 bytes {main} [built]
-    + 18 hidden modules
-ℹ ｢wdm｣: Compiled successfully.
+Open http://127.0.0.1:8080 using your preferred broswer
+
+#### Prerequisites
+Web browser like Chrome, Mozilla or similar.
 
 
+### Github Repo
+https://github.com/geraldgsh/shinobi-run
 
-./webpack.config.js
+### Future enhancement
 
-const path = require('path');
+1. Leaderboard with highest scores and player name.
+2. Get individual tweens to move back and forth
+3. JSONIFY names and score to be sent to a public server using APIs
+4. Reset game to stage 1 when game is over
+5. Set physically camera bounds to pushes shinobi as it pans left to right
+6. Add background music and sound effects
 
-module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
-  output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
-      },
-      {
-        test: /\.(png|svg|jpg|gif|jpeg)$/,
-        use: [
-          'file-loader',
-        ],
-      },
-	  {
-        test: /\.js$/, exclude: /node_modules/,
-        include: path.resolve(__dirname, 'src/'),
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      },
-    ],
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
-  },
-};
+and many more.....
 
+👤 **Author**
 
-$ yarn add -D copy-webpack-plugin
-yarn add -D copy-webpack-plugin
-yarn add v1.21.1
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-info fsevents@1.2.11: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.11" is an optional dependency and failed compatibility check. Excluding it from installation.        [3/4] Linking dependencies...
-[4/4] Building fresh packages...
-success Saved lockfile.
-success Saved 5 new dependencies.
-info Direct dependencies
-└─ copy-webpack-plugin@5.1.1
-info All dependencies
-├─ copy-webpack-plugin@5.1.1
-├─ dir-glob@2.2.2
-├─ globby@7.1.1
-├─ ignore@3.3.10
-└─ path-type@3.0.0
-Done in 4.08s.
+Github: [geraldgsh](https://github.com/geraldgsh)
 
-yarn webpack
-yarn run webpack-dev-server
+Twitter: [geraldgsh](https://github.com/geraldgsh)
 
-$ yarn add eslint
-yarn add v1.21.1
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-info fsevents@1.2.11: The platform "linux" is incompatible with this module.
-info "fsevents@1.2.11" is an optional dependency and failed compatibility check. Excluding it from installation.        [3/4] Linking dependencies...
-[4/4] Building fresh packages...
+Linkedin: [Gerald Goh](https://www.linkedin.com/geraldgsh)
 
-success Saved lockfile.
-success Saved 53 new dependencies.
-info Direct dependencies
-└─ eslint@6.8.0
-info All dependencies
-├─ @types/color-name@1.1.1
-├─ acorn-jsx@5.2.0
-├─ acorn@7.1.1
-├─ ansi-escapes@4.3.1
-├─ argparse@1.0.10
-├─ astral-regex@1.0.0
-├─ callsites@3.1.0
-├─ chardet@0.7.0
-├─ cli-cursor@3.1.0
-├─ cli-width@2.2.0
-├─ deep-is@0.1.3
-├─ doctrine@3.0.0
-├─ eslint-utils@1.4.3
-├─ eslint@6.8.0
-.
-.
-└─ write@1.0.3
-Done in 17.75s.
+## 🤝 Contributing
+Contributions, issues and feature requests are welcome!
 
-$ eslint --init
-? How would you like to use ESLint? To check syntax, find problems, and enforce code style
-? What type of modules does your project use? JavaScript modules (import/export)
-? Which framework does your project use? None of these
-? Does your project use TypeScript? No
-? Where does your code run? Browser
-? How would you like to define a style for your project? Use a popular style guide
-? Which style guide do you want to follow? Airbnb: https://github.com/airbnb/javascript
-? What format do you want your config file to be in? JSON
-Checking peerDependencies of eslint-config-airbnb-base@latest
-Local ESLint installation not found.
-The config that you've selected requires the following dependencies:
+Feel free to check the [issues page](https://github.com/geraldgsh/shinobi-run/issues).
 
-eslint-config-airbnb-base@latest eslint@^5.16.0 || ^6.8.0 eslint-plugin-import@^2.20.1
-? Would you like to install them now with npm? Yes
-Installing eslint-config-airbnb-base@latest, eslint@^5.16.0 || ^6.8.0, eslint-plugin-import@^2.20.1
+## Show your support
 
-+ eslint-plugin-import@2.20.1
-+ eslint@6.8.0
-+ eslint-config-airbnb-base@14.1.0
-added 83 packages from 84 contributors, removed 27 packages, updated 749 packages and audited 13596 packages in 70.182s 
-35 packages are looking for funding
-  run `npm fund` for details
+Give a ⭐️ if you like this project!
 
-found 0 vulnerabilities
+## Acknowledgments
 
-Successfully created .eslintrc.json file in /mnt/d/Google_Drive/Microverse/5.Javascript/7.phaser/shinobi-run
-ESLint was installed locally. We recommend using this local copy instead of your globally-installed copy.
+- Hat tip to anyone whose code was used
+- Inspiration
+- etc
 
-$ yarn add -D jest
-yarn add v1.21.1
-warning package-lock.json found. Your project contains lock files generated by tools other than Yarn. It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. To clear this warning, remove package-lock.json.
-[1/4] Resolving packages...
-[2/4] Fetching packages...
-[3/4] Linking dependencies...
-[4/4] Building fresh packages...
-success Saved lockfile.
-success Saved 155 new dependencies.
-info Direct dependencies
-├─ eslint-config-airbnb-base@14.1.0
-├─ eslint-plugin-import@2.20.1
-└─ jest@25.1.0
-info All dependencies
-├─ @babel/plugin-syntax-bigint@7.8.3
-├─ @bcoe/v8-coverage@0.2.3
-├─ @cnakazawa/watch@1.0.4
-.
-.
-└─ yargs-parser@18.1.0
-Done in 78.25s.
+## 📝 License
 
-sequence;
-
-0. game config and state with DOM
-1. Add sprite
-2. Add sprite idle and run animattion
-3. add keyboard input for left and right
-4. physics
-5. gravity
-6. jump
-7. throw kunai
-8. Add platforms
-9. add levels
-10. enemy
-11. player kill
-12. enemy kill
-13. add stars
-14. scoring
+This project is [MIT](lic.url) licensed.
