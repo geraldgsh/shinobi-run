@@ -2,6 +2,9 @@ import { floors } from "../assetManager/flooring";
 import {
   preloadShinobiIdle,
   preloadShinobiRun,
+  preloadShinobiJump,
+  preloadShinobiThrow,
+  preloadShinobiKunai,
   preloadStar,
   preloadBG,
   preloadPlatform,
@@ -30,6 +33,39 @@ export class Stage extends Phaser.Scene {
     this.preloader();
   }
 
+  preloader() {
+    this.load.image('shinobi', 'assets/ninja/Idle__000.png');
+    preloadShinobiKunai.forEach(kunai => {
+      this.load.image(kunai.name, kunai.path);
+    });
+    preloadShinobiIdle.forEach(idle => {
+      this.load.image(idle.name, idle.path);
+    });
+    preloadShinobiRun.forEach(run => {
+      this.load.image(run.name, run.path);
+    });
+    preloadShinobiJump.forEach(jump => {
+      this.load.image(jump.name, jump.path);
+    });
+    preloadShinobiThrow.forEach(toss => {
+      this.load.image(toss.name, toss.path);
+    });
+    preloadStar.forEach(star => {
+      this.load.image(star.name, star.path);
+    });
+    preloadBG.forEach(BG => {
+      this.load.image(BG.name, BG.path);
+    });
+    preloadPlatform.forEach(platform => {
+      this.load.image(platform.name, platform.path);
+    });
+    preloadEnemy.forEach(enemy => {
+      this.load.image(enemy.name, enemy.path);
+    });
+    this.load.spritesheet('door', 'assets/door/door.png',
+    { frameWidth: 32, frameHeight: 32});
+  }
+
   create() {
     gameState.active = true;
     gameState.player = this.physics.add.sprite(100, 500, 'shinobi').setDepth(1000);
@@ -46,77 +82,6 @@ export class Stage extends Phaser.Scene {
     this.camera();
     this.physics.add.collider(gameState.player, gameState.platforms);
     this.physics.add.collider(gameState.goal, gameState.platforms);
-  }
-
-  preloader() {
-    this.load.image('shinobi', 'assets/ninja/Idle__000.png');
-
-    this.load.image('kunaiLeft', 'assets/ninja/Kunai-left.png');
-    this.load.image('kunaiRight', 'assets/ninja/Kunai-right.png');
-
-    preloadShinobiIdle.forEach(idle => {
-      this.load.image(idle.name, idle.path);
-    });
-
-    preloadShinobiRun.forEach(run => {
-      this.load.image(run.name, run.path);
-    });
-
-    this.load.image('shinobi-rn0', 'assets/ninja/run__000.png');
-    this.load.image('shinobi-rn1', 'assets/ninja/run__001.png');
-    this.load.image('shinobi-rn2', 'assets/ninja/run__002.png');
-    this.load.image('shinobi-rn3', 'assets/ninja/run__003.png');
-    this.load.image('shinobi-rn4', 'assets/ninja/run__004.png');
-    this.load.image('shinobi-rn5', 'assets/ninja/run__005.png');
-    this.load.image('shinobi-rn6', 'assets/ninja/run__006.png');
-    this.load.image('shinobi-rn7', 'assets/ninja/run__007.png');
-    this.load.image('shinobi-rn8', 'assets/ninja/run__008.png');
-    this.load.image('shinobi-rn9', 'assets/ninja/run__009.png');
-
-    this.load.image('shinobi-jp0', 'assets/ninja/jump__000.png');
-    this.load.image('shinobi-jp1', 'assets/ninja/jump__001.png');
-    this.load.image('shinobi-jp2', 'assets/ninja/jump__002.png');
-    this.load.image('shinobi-jp3', 'assets/ninja/jump__003.png');
-    this.load.image('shinobi-jp4', 'assets/ninja/jump__004.png');
-    this.load.image('shinobi-jp5', 'assets/ninja/jump__005.png');
-    this.load.image('shinobi-jp6', 'assets/ninja/jump__006.png');
-    this.load.image('shinobi-jp7', 'assets/ninja/jump__007.png');
-    this.load.image('shinobi-jp8', 'assets/ninja/jump__008.png');
-    this.load.image('shinobi-jp9', 'assets/ninja/jump__009.png');
-
-    this.load.image('shinobi-tw0', 'assets/ninja/Throw__000.png');
-    this.load.image('shinobi-tw1', 'assets/ninja/Throw__001.png');
-    this.load.image('shinobi-tw2', 'assets/ninja/Throw__002.png');
-    this.load.image('shinobi-tw3', 'assets/ninja/Throw__003.png');
-    this.load.image('shinobi-tw4', 'assets/ninja/Throw__004.png');
-    this.load.image('shinobi-tw5', 'assets/ninja/Throw__005.png');
-    this.load.image('shinobi-tw6', 'assets/ninja/Throw__006.png');
-    this.load.image('shinobi-tw7', 'assets/ninja/Throw__007.png');
-    this.load.image('shinobi-tw8', 'assets/ninja/Throw__008.png');
-    this.load.image('shinobi-tw9', 'assets/ninja/Throw__009.png');
-
-    this.load.spritesheet('door', 'assets/door/door.png',
-    { frameWidth: 32, frameHeight: 32});
-    preloadStar.forEach(star => {
-      this.load.image(star.name, star.path);
-    });
-    preloadBG.forEach(BG => {
-      this.load.image(BG.name, BG.path);
-    });
-    preloadPlatform.forEach(platform => {
-      this.load.image(platform.name, platform.path);
-    });
-    preloadEnemy.forEach(enemy => {
-      this.load.image(enemy.name, enemy.path);
-    });
-    // preloadSpriteSheet.forEach(sprite => {
-    //   this.load.spritesheet(
-    //     sprite.name, 
-    //     sprite.path, 
-    //     sprite.frameWidth, 
-    //     sprite.frameHeight
-    //   );
-    // });
   }
 
   makeStars() {
