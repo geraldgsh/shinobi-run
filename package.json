@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Endless running platform game",
   "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode development",
+    "test": "jest",
+    "pretest": "npm run build"
+  },
   "repository": "https://github.com/geraldgsh/shinobi-run.git",
   "author": "Gerald Goh",
   "license": "MIT",
