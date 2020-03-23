@@ -1,5 +1,4 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable class-methods-use-this, import/prefer-default-export */
 import { floors } from '../assetManager/flooring';
 import {
   preloadShinobiIdle,
@@ -18,6 +17,7 @@ import {
   shinobiAnimsJump,
   shinobiAnimsThrow,
 } from '../assetManager/anims';
+import { Player } from '../constructor/constructor';
 
 const gameState = {
   speed: 240,
@@ -25,6 +25,9 @@ const gameState = {
   width: 5120,
   height: 640,
 };
+
+let points = 0;
+const result = [];
 
 export class Stage extends Phaser.Scene {
   constructor(key) {
@@ -34,8 +37,8 @@ export class Stage extends Phaser.Scene {
       Stage1: 'Stage2',
       Stage2: 'Stage3',
       Stage3: 'Stage4',
+      Stage4: 'Stage1',
     };
-    this.score = 0;
   }
 
   preload() {
@@ -85,6 +88,10 @@ export class Stage extends Phaser.Scene {
     gameState.platforms = this.physics.add.staticGroup();
     gameState.kunaiLeft = this.physics.add.group();
     gameState.kunaiRight = this.physics.add.group();
+    gameState.scoreText = this.add.text(
+      16, 16, 'score : 0',
+      { fontSize: '32px', fill: '#000' },
+    ).setScrollFactor(0);
     this.makeFloors();
     this.stageSetup();
     this.enemies();
@@ -93,6 +100,20 @@ export class Stage extends Phaser.Scene {
     this.camera();
     this.physics.add.collider(gameState.player, gameState.platforms);
     this.physics.add.collider(gameState.goal, gameState.platforms);
+  }
+
+  updateScore(points) {
+    const results = JSON.parse(localStorage.getItem('result'));
+    if (results === null) {
+      const player1 = Player('', points);
+      result.push(player1);
+      window.localStorage.setItem('result', JSON.stringify(result));
+    } else if (results[0].score <= points) {
+      result.splice(0, 1);
+      const player1 = Player('', points);
+      result.push(player1);
+      window.localStorage.setItem('result', JSON.stringify(result));
+    }
   }
 
   makeStars() {
@@ -108,21 +129,16 @@ export class Stage extends Phaser.Scene {
       child.setBounceY(Phaser.Math.FloatBetween(0.3, 0.6));
     });
 
-    const scoreText = this.add.text(
-      16, 16, 'score : 0',
-      { fontSize: '32px', fill: '#000' },
-    ).setScrollFactor(0);
-
     function getStar(player, star) {
       star.disableBody(true, true);
-      this.score += 10;
-      scoreText.setText(`Score: ${this.score}`);
+      points += 10;
+      gameState.scoreText.setText(`Score: ${points}`);
       if (gameState.stars.countActive(true) === 0) {
         stars.children.iterate((child) => {
           child.enableBody(true, child.x, 0, true, true);
         });
       }
-      this.showScore(this.score);
+      this.showScore(points);
     }
 
     this.physics.add.collider(gameState.stars, gameState.platforms);
@@ -135,7 +151,7 @@ export class Stage extends Phaser.Scene {
 
   showScore() {
     const scoreElement = document.getElementById('score');
-    scoreElement.innerHTML = `Current Score: ${this.score}`;
+    scoreElement.innerHTML = `Current Score: ${points}`;
     scoreElement.setAttribute('class', 'has-text-white has-text-weight-bold');
   }
 
@@ -155,18 +171,19 @@ export class Stage extends Phaser.Scene {
     }
 
     function hitEnemyRight(kunaiRight, enemy) {
-      this.score += 30;
+      points += 30;
       kunaiRight.destroy();
       enemy.destroy();
-      this.showScore(this.score);
-      return this.score;
+      this.showScore(points);
+      gameState.scoreText.setText(`Score: ${points}`);
     }
 
     function hitEnemyLeft(kunaiLeft, enemy) {
-      this.score += 30;
+      points += 30;
       kunaiLeft.destroy();
       enemy.destroy();
-      this.showScore(this.score);
+      this.showScore(points);
+      gameState.scoreText.setText(`Score: ${points}`);
     }
 
     function hitPlayer(player) {
@@ -178,10 +195,11 @@ export class Stage extends Phaser.Scene {
       this.physics.pause();
       gameState.active = false;
       player.anims.play('turn');
-      this.score = 0;
       this.input.on('pointerup', () => {
         this.scene.restart(this.stageKey);
       });
+      this.updateScore(points);
+      points = 0;
     }
 
     const start = async () => {
@@ -294,6 +312,7 @@ export class Stage extends Phaser.Scene {
     gameState.goal = this.physics.add.sprite(
       gameState.width - 100, 100, 'door',
     ).setDepth(1000);
+    gameState.goal.setScale(3.0);
     this.physics.add.overlap(gameState.player, gameState.goal, () => {
       this.cameras.main.fade(800, 0, 0, 0, false, (camera, progress) => {
         if (progress > 0.9) {

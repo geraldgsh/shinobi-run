@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
-// eslint-disable-next-line import/no-unresolved
+/* eslint-disable no-unused-vars, import/no-unresolved */
 import 'phaser';
 import { Stage1 } from './scenes/stage1';
 import { Stage2 } from './scenes/stage2';
 import { Stage3 } from './scenes/stage3';
 import { Stage4 } from './scenes/stage4';
+import { makeGameKey } from './APIManager/gameKey';
 
 const gameCanvas = document.getElementById('gameCanvas');
 

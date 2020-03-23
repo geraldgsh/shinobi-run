@@ -8,6 +8,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
   <link rel="stylesheet" href='style.css'>
 </head>
+<form id="formElem">
+  <input type="text" name="name" value="John">
+  <input type="text" name="surname" value="Smith">
+  <input type="submit">
+</form>
+
 <body>
   <section class="columns">
     <div class="column game is-9">
@@ -30,8 +36,8 @@
             class="input"
             id="player"
             placeholder="Player name"
-          />
-        <button class="startButton button is-primary">
+          /><br><br>
+        <button id='start' class="startButton button is-primary">
           Start New Game!
         </button>
       </div>

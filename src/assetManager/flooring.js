@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-export const floors = [
+const floors = [
   { x: 0, y: 640 },
   { x: 302, y: 640 },
   { x: 604, y: 640 },
@@ -19,3 +18,5 @@ export const floors = [
   { x: 4832, y: 640 },
   { x: 5134, y: 640 },
 ];
+
+module.exports = { floors, default: floors };
