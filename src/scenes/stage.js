@@ -17,7 +17,10 @@ import {
   shinobiAnimsJump,
   shinobiAnimsThrow,
 } from '../assetManager/anims';
-import { Player, result } from '../constructor/constructor';
+import { Player, result, player1 } from '../constructor/constructor';
+import updateLeaderboard from '../APIManager/leaderboard';
+
+let points = 0;
 
 const gameState = {
   speed: 240,
@@ -25,8 +28,6 @@ const gameState = {
   width: 5120,
   height: 640,
 };
-
-let points = 0;
 
 export class Stage extends Phaser.Scene {
   constructor(key) {
@@ -103,16 +104,19 @@ export class Stage extends Phaser.Scene {
 
   updateScore(points) {
     const results = JSON.parse(localStorage.getItem('result'));
+    console.log(points);
     if (results[0].score === 0) {
-      const player1 = Player('', points);
+      result.splice(0, 1);
+      const player1 = Player(results[0].user, points);
       result.push(player1);
       window.localStorage.setItem('result', JSON.stringify(result));
     } else if (results[0].score <= points) {
       result.splice(0, 1);
-      const player1 = Player('', points);
+      const player1 = Player(results[0].user, points);
       result.push(player1);
       window.localStorage.setItem('result', JSON.stringify(result));
     }
+    updateLeaderboard();
   }
 
   makeStars() {

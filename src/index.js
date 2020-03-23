@@ -27,11 +27,12 @@ const game = new Phaser.Game(gameConfig);
 
 const eventHandler = (() => {
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('start').addEventListener('click', () => { 
-      newPlayer(); 
+    document.getElementById('start').addEventListener('click', () => {
+      newPlayer();
     });
   });
   document.getElementById('new').addEventListener('click', () => {
+    localStorage.clear();
     window.location.reload();
   });
 })();

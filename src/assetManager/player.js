@@ -4,7 +4,8 @@ import { Player, result } from '../constructor/constructor';
 export default function newPlayer() {
   const results = JSON.parse(localStorage.getItem('result'));
   const player1Name = document.getElementById('player1name').value;
-  if (results[0].user === '') {
+
+  if (results === null) {
     const player1 = Player(player1Name, 0);
     result.push(player1);
     window.localStorage.setItem('result', JSON.stringify(result));
@@ -14,6 +15,6 @@ export default function newPlayer() {
     result.push(player1);
     window.localStorage.setItem('result', JSON.stringify(result));
   } else {
-    alert('User another name!');
+    alert('Please use another name.');
   }
 }
