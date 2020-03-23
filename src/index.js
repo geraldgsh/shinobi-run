@@ -4,7 +4,7 @@ import { Stage1 } from './scenes/stage1';
 import { Stage2 } from './scenes/stage2';
 import { Stage3 } from './scenes/stage3';
 import { Stage4 } from './scenes/stage4';
-import { makeGameKey } from './APIManager/gameKey';
+import newPlayer from './assetManager/player';
 
 const gameCanvas = document.getElementById('gameCanvas');
 
@@ -24,3 +24,14 @@ const gameConfig = {
 };
 
 const game = new Phaser.Game(gameConfig);
+
+const eventHandler = (() => {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('start').addEventListener('click', () => { 
+      newPlayer(); 
+    });
+  });
+  document.getElementById('new').addEventListener('click', () => {
+    window.location.reload();
+  });
+})();

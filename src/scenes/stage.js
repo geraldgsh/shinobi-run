@@ -17,7 +17,7 @@ import {
   shinobiAnimsJump,
   shinobiAnimsThrow,
 } from '../assetManager/anims';
-import { Player } from '../constructor/constructor';
+import { Player, result } from '../constructor/constructor';
 
 const gameState = {
   speed: 240,
@@ -27,7 +27,6 @@ const gameState = {
 };
 
 let points = 0;
-const result = [];
 
 export class Stage extends Phaser.Scene {
   constructor(key) {
@@ -104,7 +103,7 @@ export class Stage extends Phaser.Scene {
 
   updateScore(points) {
     const results = JSON.parse(localStorage.getItem('result'));
-    if (results === null) {
+    if (results[0].score === 0) {
       const player1 = Player('', points);
       result.push(player1);
       window.localStorage.setItem('result', JSON.stringify(result));
