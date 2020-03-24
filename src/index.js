@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, import/no-unresolved */
-import Phaser from '../dist/phaser';
+import Phaser from '../dist/phaser.min';
 import { Stage1 } from './scenes/stage1';
 import { Stage2 } from './scenes/stage2';
 import { Stage3 } from './scenes/stage3';
