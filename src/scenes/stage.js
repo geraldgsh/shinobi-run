@@ -17,7 +17,7 @@ import {
   shinobiAnimsJump,
   shinobiAnimsThrow,
 } from '../assetManager/anims';
-import { Player, result, player1 } from '../constructor/constructor';
+import { Player, result } from '../constructor/constructor';
 import updateLeaderboard from '../APIManager/leaderboard';
 
 let points = 0;
@@ -104,7 +104,6 @@ export class Stage extends Phaser.Scene {
 
   updateScore(points) {
     const results = JSON.parse(localStorage.getItem('result'));
-    console.log(points);
     if (results[0].score === 0) {
       result.splice(0, 1);
       const player1 = Player(results[0].user, points);

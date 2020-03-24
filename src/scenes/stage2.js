@@ -14,4 +14,12 @@ export class Stage2 extends Stage {
       7, 4, 1,
     ];
   }
+
+  preload() {
+    this.load.image('cityBGNight', 'assets/city/city_bg_night.png');
+  }
+
+  create() {
+    this.add.image(2560, 320, 'cityBGNight');
+  }
 }
