@@ -9,6 +9,22 @@
     "pretest": "npm run build"
   },
   "repository": "https://github.com/geraldgsh/shinobi-run.git",
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "setupFiles": [
+      "jest-canvas-mock"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|sass|scss)$": "<rootDir>/test/mocks/styleMock.js",
+      "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/test/mocks/fileMock.js"
+    }
+  },
   "author": "Gerald Goh",
   "license": "MIT",
   "devDependencies": {
@@ -23,6 +39,7 @@
     "eslint-plugin-import": "^2.20.1",
     "file-loader": "^5.1.0",
     "jest": "^25.1.0",
+    "jest-canvas-mock": "^2.2.0",
     "url-loader": "^3.0.0",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
