@@ -7,5 +7,3 @@ export const Player = (user, score) => ({
 export const Key = (key) => ({
   key,
 });
-
-// module.exports = { Player, default: Player };
