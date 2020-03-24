@@ -36,6 +36,7 @@ Checkout our [wikipage](https://github.com/geraldgsh/shinobi-run/wiki) for more 
 - PHASER JS
 - npm
 - webpack
+- Jest
 
 #### Live Demo
 
