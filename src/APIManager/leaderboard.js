@@ -12,7 +12,7 @@ const sorter = (object) => {
 const getLeaderboard = () => {
   (async () => {
     try {
-      const scores = await fetch('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/9uEL592fTdE2ZHjkFVdT/scores',
+      const scores = await fetch('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/l4D6EKOnCSG2nZhU4FzI/scores',
         {
           method: 'GET',
           headers: {
@@ -36,7 +36,7 @@ export default function updateLeaderboard() {
       score: results[0].score,
     };
     try {
-      const response = await fetch('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/9uEL592fTdE2ZHjkFVdT/scores',
+      const response = await fetch('https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/l4D6EKOnCSG2nZhU4FzI/scores',
         {
           method: 'POST',
           headers: {

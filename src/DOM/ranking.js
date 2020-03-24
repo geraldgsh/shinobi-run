@@ -3,7 +3,7 @@ export default function ranking(ranks) {
   const content = document.getElementById('content');
   content.innerHTML = '';
   let count = 11;
-  for (let i = 0; i < 10; i += 1) {
+  for (let i = 10; i > 0; i -= 1) {
     count -= 1;
     const row = content.insertRow(0);
     row.setAttribute('data-index', `${i}`);

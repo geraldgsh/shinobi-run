@@ -104,17 +104,10 @@ export class Stage extends Phaser.Scene {
 
   updateScore(points) {
     const results = JSON.parse(localStorage.getItem('result'));
-    if (results[0].score === 0) {
-      result.splice(0, 1);
-      const player1 = Player(results[0].user, points);
-      result.push(player1);
-      window.localStorage.setItem('result', JSON.stringify(result));
-    } else if (results[0].score <= points) {
-      result.splice(0, 1);
-      const player1 = Player(results[0].user, points);
-      result.push(player1);
-      window.localStorage.setItem('result', JSON.stringify(result));
-    }
+    result.splice(0, 1);
+    const player1 = Player(results[0].user, points);
+    result.push(player1);
+    window.localStorage.setItem('result', JSON.stringify(result));
     updateLeaderboard();
   }
 
