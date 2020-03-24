@@ -8,12 +8,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
   <link rel="stylesheet" href='style.css'>
 </head>
-<form id="formElem">
-  <input type="text" name="name" value="John">
-  <input type="text" name="surname" value="Smith">
-  <input type="submit">
-</form>
-
 <body>
   <section class="columns">
     <div class="column game is-9">
@@ -33,13 +27,28 @@
           </ol>
         <input
             type="text"
+            onfocus="this.value=''"
             class="input"
-            id="player"
+            id="player1name"
             placeholder="Player name"
           /><br><br>
         <button id='start' class="startButton button is-primary">
-          Start New Game!
+          Start Game!
         </button>
+        <button id='new' class="restartButton button is-success">
+          New Game!
+        </button><br><br>
+        <div id="score" class="score"></div>
+        <div><br>
+          <table class = "table is-bordered" id="table">
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Score</th>
+            </tr>
+            <tbody id="content"></tbody>
+          </table>
+        </div>
       </div>
       <div id="score" class="score"></div>
       <div id='leaderboard' class="row"></div>      
