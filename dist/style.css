@@ -10,6 +10,10 @@ body {
   width: 100%;
 }
 
+#gameCanvas {
+  display: none;
+}
+
 .game {
   align-self: center;
   display: flex;
