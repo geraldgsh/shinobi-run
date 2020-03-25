@@ -23,7 +23,7 @@ const getLeaderboard = () => {
       const content = await scores.json();
       ranking(sorter(content.result));
     } catch (err) {
-      throw new Error('Unable to fetch JSON response');
+      throw new Error('Unable to fetch score!');
     }
   })();
 };
@@ -48,7 +48,7 @@ export default function updateLeaderboard() {
       const content = await response.json();
       console.log(content.result);
     } catch (err) {
-      throw new Error('Unable to fetch JSON response');
+      throw new Error('Unable to send score!');
     }
   })();
   getLeaderboard();

@@ -25,18 +25,16 @@ The first 2 days was exploring Phaser.js framework through tutorials and reading
 
 #### Built with
 
-This is a testing app built with babel & JS.
-
-### Wiki
-
-Checkout our [wikipage](https://github.com/geraldgsh/shinobi-run/wiki) for more details. 
-
 - JavaScript
 - HMTL
 - PHASER JS
 - npm
 - webpack
 - Jest
+
+### Wiki
+
+Checkout our [wikipage](https://github.com/geraldgsh/shinobi-run/wiki) for more details. 
 
 #### Live Demo
 
