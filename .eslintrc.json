@@ -10,10 +10,11 @@
     },
     "extends": ["airbnb-base"],
     "rules": {
+      "no-undef": "off",
       "linebreak-style": "off",
       "no-shadow": "off",
       "no-param-reassign": "off",
       "eol-last": "off",
       "arrow-parens": "off"
     }
-}
+  }
