@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<title>Shinobi Run!</title>
+	<meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <link rel="stylesheet" href='style.css'>
+</head>
+<body>
+  <section class="columns">
+    <div class="column game is-9">
+      <div class="row">
+        <canvas id="gameCanvas" width="960" height="640"></canvas> 
+      </div>                 
+    </div>
+    <div class="column shelf is-3">
+      <div class="row">
+        <h3 class="title is-3 has-text-white" >Shinobi Run</h3>
+        <p class='has-text-white has-text-weight-bold'>Help Shinobi escape the city</p>
+        <div class="content">
+          <ol class='has-text-white has-text-weight-bold' type="1">
+            <li>Press "x" to start</li>
+            <li>Push "z" to attack & "Spacebar" to jump</li>
+            <li>Clear Snowmen, collect stars & enter portal</li>
+          </ol>
+        <input
+            type="text"
+            onfocus="this.value=''"
+            class="input"
+            id="player1name"
+            placeholder="Player name"
+          /><br><br>
+        <button id='start' class="startButton button is-primary">
+          Start Game!
+        </button>
+        <button id='new' class="restartButton button is-success">
+          New Game!
+        </button><br><br>
+        <div id="score" class="score"></div>
+        <div><br>
+          <table class = "table is-bordered" id="table">
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Score</th>
+            </tr>
+            <tbody id="content"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="score" class="score"></div>
+      <div id='leaderboard' class="row"></div>      
+    </div>    
+  </section>
+  <script defer src="phaser.min.js"></script>
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+  <script src="main.js"></script>  
+</body>
+</html>
